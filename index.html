@@ -223,6 +223,36 @@
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
   @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+
+
+  /* ---------- SPGS Internal Command Center Upgrade ---------- */
+  .command-center{padding:14px 18px 4px;}
+  .dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 12px;}
+  .dash-card{position:relative;overflow:hidden;border:1px solid rgba(127,176,255,.18);background:linear-gradient(180deg,rgba(27,36,59,.96),rgba(15,21,36,.92));border-radius:18px;padding:13px 12px;box-shadow:0 12px 30px rgba(0,0,0,.22);}
+  .dash-card:before{content:"";position:absolute;inset:-40% -20% auto auto;width:90px;height:90px;background:radial-gradient(circle,rgba(91,141,239,.18),transparent 70%);pointer-events:none;}
+  .dash-card.profit:before{background:radial-gradient(circle,rgba(70,220,145,.20),transparent 70%);}
+  .dash-card.warn:before{background:radial-gradient(circle,rgba(242,179,61,.22),transparent 70%);}
+  .dash-value{font-weight:900;font-size:20px;letter-spacing:-.04em;line-height:1;white-space:nowrap;}
+  .dash-label{margin-top:6px;color:var(--chrome-dim);font-size:10px;text-transform:uppercase;letter-spacing:.11em;font-weight:800;}
+  .quick-panel{border:1px solid var(--line-soft);border-radius:22px;padding:12px;background:linear-gradient(135deg,rgba(20,27,46,.95),rgba(11,15,26,.96));box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 18px 40px rgba(0,0,0,.20);}
+  .quick-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;color:var(--steel);font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.13em;}
+  .quick-title span:last-child{color:var(--chrome-dim);font-weight:800;letter-spacing:0;text-transform:none;font-size:11px;}
+  .quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+  .qbtn{border:1px solid rgba(127,176,255,.18);background:rgba(255,255,255,.045);color:var(--ink);border-radius:15px;padding:11px 8px;font-weight:900;font-size:12px;line-height:1.05;min-height:54px;box-shadow:0 10px 22px rgba(0,0,0,.16);}
+  .qbtn small{display:block;color:var(--chrome-dim);font-size:9px;font-weight:800;margin-top:4px;text-transform:uppercase;letter-spacing:.07em;}
+  .qbtn.primary{background:linear-gradient(135deg,var(--red),var(--red-deep));border-color:rgba(255,255,255,.16);}
+  .qbtn.blue{background:linear-gradient(135deg,rgba(91,141,239,.95),rgba(61,94,190,.95));border-color:rgba(255,255,255,.14);}
+  .qbtn.gold{background:linear-gradient(135deg,rgba(242,179,61,.95),rgba(174,111,19,.95));border-color:rgba(255,255,255,.14);color:#10131a;}
+  .qbtn:active{transform:translateY(1px) scale(.99);}
+  .ops-note{margin:10px 3px 0;color:var(--chrome-dim);font-size:11px;line-height:1.35;}
+  .moneyrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .card .profitline{margin-top:9px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:var(--chrome-dim);font-size:12px;font-weight:800;}
+  .mini-money{font-family:var(--mono);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:4px 7px;background:rgba(255,255,255,.035);}
+  .mini-money.good{color:#7ee2a8;border-color:rgba(126,226,168,.20);}
+  .mini-money.warn{color:var(--gold);border-color:rgba(242,179,61,.20);}
+  .btn.copy{background:linear-gradient(135deg,rgba(91,141,239,.95),rgba(45,67,145,.95));color:white;}
+  @media(max-width:420px){.dash-grid{gap:8px}.dash-card{padding:12px 10px}.dash-value{font-size:18px}.quick-actions{grid-template-columns:repeat(2,1fr)}.qbtn{min-height:50px}.moneyrow{grid-template-columns:1fr 1fr}.moneyrow .field:nth-child(3){grid-column:1/-1}}
+
 </style>
 </head>
 <body>
@@ -241,6 +271,25 @@
       <div class="gauge gas"><div class="val" id="rSold">0</div><div class="lab">Sold</div></div>
     </div>
   </header>
+
+
+  <section class="command-center" aria-label="Internal command center">
+    <div class="dash-grid">
+      <div class="dash-card profit"><div class="dash-value" id="rProfit">$0</div><div class="dash-label">Realized Profit</div></div>
+      <div class="dash-card"><div class="dash-value" id="rCost">$0</div><div class="dash-label">Capital In Stock</div></div>
+      <div class="dash-card warn"><div class="dash-value" id="rPending">0</div><div class="dash-label">Pending / Listed</div></div>
+    </div>
+    <div class="quick-panel">
+      <div class="quick-title"><span>SPGS Command Center</span><span>built for one-handed logging</span></div>
+      <div class="quick-actions">
+        <button class="qbtn primary" id="quickAdd" type="button">+ Bat<small>inventory</small></button>
+        <button class="qbtn blue" id="quickListed" type="button">Listed<small>prep sale</small></button>
+        <button class="qbtn gold" id="quickSold" type="button">Sold<small>close out</small></button>
+        <button class="qbtn" id="quickNeeds" type="button">Needs $<small>missing ask</small></button>
+      </div>
+      <div class="ops-note">Tip: log cost, ask, sold price, shipping, and fees. Bat Tank will separate inventory value from realized profit.</div>
+    </div>
+  </section>
 
   <div class="controls">
     <div class="search">
@@ -346,6 +395,14 @@
       <div><label class="lab" for="f_cost">Cost ($)</label>
         <input id="f_cost" type="number" inputmode="decimal" step="1" min="0" placeholder="optional" /></div>
     </div>
+    <div class="field moneyrow">
+      <div><label class="lab" for="f_sold">Sold For ($)</label>
+        <input id="f_sold" type="number" inputmode="decimal" step="1" min="0" placeholder="if sold" /></div>
+      <div><label class="lab" for="f_shipping">Shipping ($)</label>
+        <input id="f_shipping" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0" /></div>
+      <div><label class="lab" for="f_fees">Fees ($)</label>
+        <input id="f_fees" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0" /></div>
+    </div>
 
     <div class="field"><label class="lab" for="f_acquired">Acquired</label>
       <input id="f_acquired" type="date" /></div>
@@ -358,6 +415,7 @@
     <div class="sactions">
       <button class="btn del" id="delBtn" type="button" style="display:none;">Delete</button>
       <button class="btn dup" id="dupBtn" type="button" style="display:none;">Duplicate</button>
+      <button class="btn copy" id="copyPostBtn" type="button" style="display:none;">Copy Post</button>
       <button class="btn save" id="saveBtn" type="button">Save bat</button>
     </div>
   </div>
@@ -405,6 +463,7 @@
       if(b.ask==null && b.price!=null){ b.ask=b.price; }
       if(oldStatus[b.status]){ b.status="instock"; }
       if(!b.status){ b.status="instock"; }
+      if(b.sold==null) b.sold=""; if(b.shipping==null) b.shipping=""; if(b.fees==null) b.fees="";
     });
   }
   async function save(){
@@ -419,14 +478,23 @@
     return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
 
   function readouts(){
-    var stock=0,asking=0,sold=0;
+    var stock=0,asking=0,sold=0,profit=0,costInStock=0,pending=0;
     bats.forEach(function(b){
-      if(b.status==="sold"){ sold++; }
-      else { stock++; asking+=Number(b.ask)||0; }
+      var cost=Number(b.cost)||0, soldFor=Number(b.sold)||0, ship=Number(b.shipping)||0, fees=Number(b.fees)||0;
+      if(b.status==="sold"){
+        sold++;
+        if(soldFor||cost||ship||fees){ profit += soldFor - cost - ship - fees; }
+      } else {
+        stock++; asking+=Number(b.ask)||0; costInStock+=cost;
+        if(b.status==="listed"||b.status==="pending") pending++;
+      }
     });
     $("rStock").textContent=stock;
     $("rAsking").textContent=money(asking)||"$0";
     $("rSold").textContent=sold;
+    if($("rProfit")) $("rProfit").textContent=money(profit)||"$0";
+    if($("rCost")) $("rCost").textContent=money(costInStock)||"$0";
+    if($("rPending")) $("rPending").textContent=pending;
   }
 
   function matchesFilter(b){ return filter==="all"||b.status===filter; }
@@ -440,7 +508,7 @@
     if(s==="brand") c.sort(function(a,b){return (a.brand+a.model).localeCompare(b.brand+b.model);});
     else if(s==="weightHi") c.sort(function(a,b){return (b.weight||0)-(a.weight||0);});
     else if(s==="weightLo") c.sort(function(a,b){return (a.weight||999)-(b.weight||999);});
-    else if(s==="priceHi") c.sort(function(a,b){return (b.price||0)-(a.price||0);});
+    else if(s==="priceHi") c.sort(function(a,b){return (Number(b.ask)||0)-(Number(a.ask)||0);});
     else c.sort(function(a,b){return (b.createdAt||0)-(a.createdAt||0);});
     return c;
   }
@@ -457,6 +525,19 @@
       b.onclick=function(){ filter=f.k; render(); };
       box.appendChild(b);
     });
+  }
+
+
+  function moneyLine(b){
+    var parts=[], cost=Number(b.cost)||0, soldFor=Number(b.sold)||0, ship=Number(b.shipping)||0, fees=Number(b.fees)||0, ask=Number(b.ask)||0;
+    if(cost) parts.push('<span class="mini-money">Cost '+money(cost)+'</span>');
+    if(b.status==="sold" && (soldFor||cost||ship||fees)){
+      var net=soldFor-cost-ship-fees;
+      parts.push('<span class="mini-money good">Net '+money(net)+'</span>');
+    } else if(ask&&cost){
+      parts.push('<span class="mini-money warn">Spread '+money(ask-cost)+'</span>');
+    }
+    return parts.length?'<div class="profitline">'+parts.join('')+'</div>':'';
   }
 
   function render(){
@@ -499,7 +580,8 @@
           (b.ask?'<div class="price">'+money(b.ask)+'</div>':'')+
         '</div>'+
         (specs.length?'<div class="spec">'+specs.join('')+'</div>':'')+
-        '<div class="meta"><span class="pill dot">'+esc(st.label)+'</span>'+tags.join('')+'</div>';
+        '<div class="meta"><span class="pill dot">'+esc(st.label)+'</span>'+tags.join('')+'</div>'+
+        moneyLine(b);
       card.onclick=function(){ openEdit(b.id); };
       list.appendChild(card);
     });
@@ -537,18 +619,18 @@
     setBrand(b.brand); setWeight(b.weight); $("f_model").value=b.model||"";
     $("f_cert").value=b.cert||""; $("f_load").value=b.load||"";
     $("f_status").value=b.status||"instock"; $("f_condition").value=b.condition||"";
-    $("f_ask").value=b.ask||""; $("f_cost").value=b.cost||""; $("f_acquired").value=b.acquired||"";
+    $("f_ask").value=b.ask||""; $("f_cost").value=b.cost||""; $("f_sold").value=b.sold||""; $("f_shipping").value=b.shipping||""; $("f_fees").value=b.fees||""; $("f_acquired").value=b.acquired||"";
     $("f_notes").value=b.notes||"";
     $("formErr").classList.remove("show");
   }
   function openAdd(){
-    editingId=null; $("sheetTitle").textContent="Add bat"; $("delBtn").style.display="none"; $("dupBtn").style.display="none";
+    editingId=null; $("sheetTitle").textContent="Add bat"; $("delBtn").style.display="none"; $("dupBtn").style.display="none"; $("copyPostBtn").style.display="none";
     fillForm({status:"instock",condition:"New"}); openSheet();
     setTimeout(function(){ $("f_brand").focus(); },260);
   }
   function openEdit(id){
     var b=bats.find(function(x){return x.id===id;}); if(!b)return;
-    editingId=id; $("sheetTitle").textContent="Edit bat"; $("delBtn").style.display=""; $("dupBtn").style.display="";
+    editingId=id; $("sheetTitle").textContent="Edit bat"; $("delBtn").style.display=""; $("dupBtn").style.display=""; $("copyPostBtn").style.display="";
     fillForm(b); openSheet();
   }
   function duplicateCurrent(){
@@ -556,7 +638,7 @@
     var b=bats.find(function(x){return x.id===editingId;}); if(!b)return;
     editingId=null;
     $("sheetTitle").textContent="Add bat";
-    $("delBtn").style.display="none"; $("dupBtn").style.display="none";
+    $("delBtn").style.display="none"; $("dupBtn").style.display="none"; $("copyPostBtn").style.display="none";
     fillForm(b); resetDelConfirm();
     toast("Copy \u2014 change the weight, then save");
     setTimeout(function(){ var w=$("f_weight"); w.focus(); if(w.select) w.select(); },80);
@@ -569,6 +651,7 @@
       weight:($("f_weight").value==="__other__"?$("f_weight_other").value.trim():$("f_weight").value),
       cert:$("f_cert").value, load:$("f_load").value, status:$("f_status").value,
       condition:$("f_condition").value, ask:$("f_ask").value.trim(), cost:$("f_cost").value.trim(),
+      sold:$("f_sold").value.trim(), shipping:$("f_shipping").value.trim(), fees:$("f_fees").value.trim(),
       acquired:$("f_acquired").value, notes:$("f_notes").value.trim()
     };
   }
@@ -612,6 +695,37 @@
     ta.setAttribute("readonly","readonly");
   }
 
+
+  function listingText(b){
+    var line=[b.weight?b.weight+'oz':'', b.brand||'', b.model||''].filter(Boolean).join(' ');
+    var details=[];
+    if(b.cert) details.push(b.cert);
+    if(b.condition) details.push(b.condition);
+    if(b.load) details.push(b.load);
+    var txt='⛽ '+line+'\n'+(details.length?details.join(' • ')+'\n':'')+(b.ask?'💰 '+money(b.ask)+'\n':'')+(b.notes?'📝 '+b.notes+'\n':'')+'— SPGS Bat Tank';
+    return txt.trim();
+  }
+  function copyCurrentPost(){
+    var b = editingId ? bats.find(function(x){return x.id===editingId;}) : collectForm();
+    if(!b) return;
+    var txt=listingText(b);
+    if(navigator.clipboard){ navigator.clipboard.writeText(txt).then(function(){toast('Listing copied');}).catch(function(){toast('Copy failed');}); }
+    else { toast('Clipboard unavailable'); }
+  }
+  function quickMode(status){
+    if(status==='needs'){
+      filter='all'; $('search').value=''; render();
+      var needs=bats.filter(function(b){return b.status!=='sold' && !Number(b.ask);});
+      if(needs.length){ $('search').value=needs[0].brand; render(); toast(needs.length+' bats missing asking price'); }
+      else toast('No missing asking prices');
+      return;
+    }
+    openAdd();
+    $('f_status').value=status||'instock';
+    if(status==='sold') $('sheetTitle').textContent='Log sold bat';
+    if(status==='listed') $('sheetTitle').textContent='Log listed bat';
+  }
+
   $("addBtn").onclick=openAdd;
   $("f_brand").onchange=function(){
     var other=$("f_brand_other");
@@ -628,6 +742,11 @@
   $("saveBtn").onclick=saveForm;
   $("delBtn").onclick=onDelete;
   $("dupBtn").onclick=duplicateCurrent;
+  $("copyPostBtn").onclick=copyCurrentPost;
+  $("quickAdd").onclick=function(){quickMode("instock");};
+  $("quickListed").onclick=function(){quickMode("listed");};
+  $("quickSold").onclick=function(){quickMode("sold");};
+  $("quickNeeds").onclick=function(){quickMode("needs");};
   $("search").oninput=render;
   $("sort").onchange=render;
   $("copyBtn").onclick=copyBackup;
