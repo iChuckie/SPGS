@@ -1,137 +1,381 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Bat Tank 4.0 — Mission Control</title>
-<meta name="theme-color" content="#070A12">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Bat Tank">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SPGS Bat Tank — Inventory OS</title>
 <style>
-:root{
-  --bg:#05070d;--bg2:#0a1020;--surface:#0e1728;--surface2:#121f34;--glass:rgba(255,255,255,.065);
-  --line:rgba(255,255,255,.12);--text:#f7fbff;--muted:#8fa0b6;--soft:#b9c8dd;
-  --red:#ff3f59;--blue:#4c8dff;--green:#27d38d;--amber:#ffc857;--purple:#a78bfa;--orange:#ff9f43;
-  --shadow:0 18px 60px rgba(0,0,0,.42);--r:26px;--r2:18px;
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 10% -10%,rgba(76,141,255,.35),transparent 32%),radial-gradient(circle at 94% 0%,rgba(255,63,89,.24),transparent 24%),linear-gradient(180deg,#070a12 0%,#05070d 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{padding:env(safe-area-inset-top) 0 calc(104px + env(safe-area-inset-bottom))}.app{max-width:980px;margin:0 auto;padding:16px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 16px}.brandmark{display:flex;gap:12px;align-items:center}.appicon{width:48px;height:48px;border-radius:17px;background:linear-gradient(145deg,#ff3f59,#4c8dff);display:grid;place-items:center;font-weight:1000;box-shadow:0 0 34px rgba(76,141,255,.36)}.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:900}.topbar h1{margin:2px 0 0;font-size:22px;letter-spacing:-.05em}.version{border:1px solid var(--line);border-radius:999px;padding:8px 10px;color:var(--soft);background:rgba(255,255,255,.04);font-size:12px;font-weight:900}.screen{display:none}.screen.active{display:block;animation:rise .26s ease both}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.hero{border:1px solid var(--line);border-radius:32px;padding:20px;background:linear-gradient(145deg,rgba(18,31,52,.98),rgba(7,12,22,.96));box-shadow:var(--shadow);overflow:hidden;position:relative}.hero:before{content:"";position:absolute;right:-80px;top:-120px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(76,141,255,.33),transparent 66%)}.hero:after{content:"";position:absolute;left:-120px;bottom:-160px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(39,211,141,.17),transparent 66%)}.hero>*{position:relative}.greeting{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.greeting h2{margin:4px 0 0;font-size:30px;line-height:1;letter-spacing:-.065em}.health{width:94px;height:94px;border-radius:32px;background:rgba(255,255,255,.06);border:1px solid var(--line);display:grid;place-items:center;text-align:center}.health b{display:block;font-size:30px;letter-spacing:-.05em}.health span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:1000}.focus{margin-top:16px;display:grid;gap:9px}.focusItem,.inboxItem{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line);background:rgba(255,255,255,.045);border-radius:18px;padding:12px}.focusItem strong,.inboxItem strong{display:block;font-size:14px}.focusItem small,.inboxItem small{display:block;color:var(--muted);margin-top:2px;font-weight:700}.priority{width:10px;height:10px;border-radius:99px;background:var(--blue);box-shadow:0 0 20px currentColor;flex:0 0 auto}.priority.red{background:var(--red)}.priority.amber{background:var(--amber)}.priority.green{background:var(--green)}.priority.purple{background:var(--purple)}.arrow{color:var(--muted);font-weight:1000}.copilot{margin:14px 0;border:1px solid rgba(76,141,255,.38);border-radius:25px;background:linear-gradient(145deg,rgba(18,31,52,.96),rgba(7,12,22,.94));padding:14px;box-shadow:0 14px 44px rgba(0,0,0,.28)}.copilot label{display:flex;align-items:center;gap:8px;color:var(--soft);font-weight:1000;margin-bottom:10px}.copilotRow{display:grid;grid-template-columns:1fr auto;gap:9px}.copilot input,.field input,.field select,.field textarea,.searchInput{width:100%;border:1px solid var(--line);border-radius:17px;background:rgba(3,6,12,.54);color:var(--text);padding:13px 14px;font-size:16px;outline:none}.copilot input:focus,.field input:focus,.field textarea:focus,.field select:focus,.searchInput:focus{border-color:rgba(76,141,255,.7);box-shadow:0 0 0 4px rgba(76,141,255,.1)}.preview{display:none;margin-top:10px;border:1px solid var(--line);border-radius:18px;padding:12px;background:rgba(255,255,255,.045)}.preview.open{display:block}.previewGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0}.previewCell{border:1px solid var(--line);border-radius:14px;padding:8px;background:rgba(0,0,0,.15)}.previewCell small{display:block;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.previewCell b{display:block;margin-top:2px}.btn{border:0;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:1000;color:#fff;background:var(--surface2);box-shadow:inset 0 0 0 1px var(--line);cursor:pointer}.btn:active,.navBtn:active,.card:active{transform:scale(.975)}.btn.primary{background:linear-gradient(145deg,#4c8dff,#2d61d9)}.btn.green{background:linear-gradient(145deg,#27d38d,#159b64)}.btn.red{background:linear-gradient(145deg,#ff3f59,#c62b41)}.btn.amber{background:linear-gradient(145deg,#ffc857,#d49217);color:#1b1300}.btn.purple{background:linear-gradient(145deg,#a78bfa,#684bd7)}.btn.ghost{background:rgba(255,255,255,.04)}.grid{display:grid;gap:12px}.pulse{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}.metric{border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.055);padding:14px;min-height:96px}.metric small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:1000}.metric b{display:block;font-size:23px;margin-top:6px;letter-spacing:-.04em}.metric.good b{color:var(--green)}.metric.warn b{color:var(--amber)}.metric.hot b{color:var(--red)}.workspace{display:grid;grid-template-columns:1fr 1fr;gap:12px}.panel{border:1px solid var(--line);border-radius:var(--r);background:rgba(14,23,40,.76);box-shadow:0 12px 40px rgba(0,0,0,.22);padding:16px}.panelHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.panel h3{margin:0;font-size:17px;letter-spacing:-.03em}.panel p{margin:0;color:var(--muted);line-height:1.38}.sectionTitle{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0 10px}.sectionTitle h2{margin:0;font-size:22px;letter-spacing:-.055em}.tools{position:sticky;top:0;z-index:6;margin:0 -16px 12px;padding:10px 16px;background:linear-gradient(180deg,rgba(5,7,13,.98),rgba(5,7,13,.78));backdrop-filter:blur(18px);display:grid;grid-template-columns:1fr auto;gap:8px}.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(18,31,52,.96),rgba(8,13,24,.96));padding:14px;text-align:left;color:var(--text);box-shadow:0 12px 38px rgba(0,0,0,.22);cursor:pointer}.cardTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.title{font-size:18px;letter-spacing:-.035em;font-weight:1000}.subtitle{color:var(--muted);font-weight:800;font-size:13px;margin-top:3px}.thumb{width:64px;height:64px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.055);display:grid;place-items:center;color:var(--muted);font-weight:1000;overflow:hidden;flex:0 0 auto}.thumb img{width:100%;height:100%;object-fit:cover}.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}.chip{border:1px solid var(--line);border-radius:999px;padding:5px 8px;font-size:12px;font-weight:900;color:var(--soft);background:rgba(255,255,255,.045)}.chip.green{color:#7bf1bd;background:rgba(39,211,141,.13)}.chip.red{color:#ff9baa;background:rgba(255,63,89,.13)}.chip.amber{color:#ffe0a0;background:rgba(255,200,87,.13)}.chip.blue{color:#a9c9ff;background:rgba(76,141,255,.13)}.chip.purple{color:#d7ccff;background:rgba(167,139,250,.13)}.financial{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.moneyBox{border:1px solid var(--line);border-radius:14px;padding:8px;background:rgba(255,255,255,.035)}.moneyBox small{display:block;font-size:10px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.1em}.moneyBox b{display:block;margin-top:3px}.miniActions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.miniActions button{border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.05);color:var(--text);padding:9px 6px;font-weight:950}.kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.lane{border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.035);padding:10px}.lane h3{margin:0 0 10px;font-size:13px;color:var(--soft);text-transform:uppercase;letter-spacing:.11em}.raffleCard{border:1px solid var(--line);border-radius:18px;padding:12px;background:rgba(14,23,40,.9);margin-bottom:10px}.bar{height:9px;background:rgba(255,255,255,.1);border-radius:999px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:999px}.raffleSummary{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.raffleSummary .moneyBox{min-height:54px}.shipList,.activity,.brainList,.inboxList{display:grid;gap:10px}.shipItem,.event,.brainCard{border:1px solid var(--line);border-radius:22px;background:rgba(14,23,40,.78);padding:14px}.shipSteps{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:11px}.step{border:1px solid var(--line);border-radius:13px;padding:9px 5px;text-align:center;color:var(--muted);font-size:12px;font-weight:900;background:rgba(255,255,255,.035)}.step.done{color:#04130c;background:linear-gradient(145deg,#62f0b6,#27d38d);border-color:transparent}.event{display:grid;grid-template-columns:42px 1fr;gap:10px}.eventIcon{width:42px;height:42px;border-radius:16px;background:linear-gradient(145deg,#162a49,#0b1424);display:grid;place-items:center;border:1px solid var(--line)}.event h4{margin:0;font-size:15px}.event p{margin:4px 0 0;color:var(--muted);font-size:13px}.event small{display:block;color:var(--muted);margin-top:8px}.brainCard{position:relative;overflow:hidden}.brainCard:before{content:"";position:absolute;right:-50px;top:-50px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(76,141,255,.16),transparent 66%)}.brainCard>*{position:relative}.brainCard strong{font-size:22px;letter-spacing:-.05em}.sisBox{border:1px solid rgba(76,141,255,.34);border-radius:26px;background:linear-gradient(145deg,rgba(18,31,52,.96),rgba(8,13,24,.96));padding:16px}.filterRow{display:flex;gap:8px;overflow:auto;margin:12px -2px 0;padding:2px}.filterRow button{white-space:nowrap}.bottomNav{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:9px max(10px,env(safe-area-inset-left)) calc(9px + env(safe-area-inset-bottom));background:rgba(5,7,13,.82);backdrop-filter:blur(22px);border-top:1px solid var(--line)}.navInner{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(6,1fr);gap:6px}.navBtn{border:0;background:transparent;color:var(--muted);border-radius:18px;padding:8px 4px;font-weight:950;font-size:11px}.navBtn span{display:block;font-size:20px;margin-bottom:2px}.navBtn.active{background:rgba(76,141,255,.16);color:#fff}.fab{position:fixed;right:18px;bottom:92px;z-index:25;width:62px;height:62px;border-radius:22px;border:0;background:linear-gradient(145deg,#ff3f59,#4c8dff);color:white;font-size:30px;font-weight:900;box-shadow:0 18px 54px rgba(0,0,0,.44)}.sheetBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;display:none}.sheetBackdrop.open{display:block}.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:linear-gradient(180deg,#121f34,#070a12);border-radius:30px 30px 0 0;border:1px solid var(--line);box-shadow:0 -20px 80px rgba(0,0,0,.55);padding:16px max(16px,env(safe-area-inset-left)) calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:.24s ease;max-height:88vh;overflow:auto}.sheet.open{transform:translateY(0)}.sheetHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.sheetHead h2{margin:0;font-size:22px;letter-spacing:-.055em}.close{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);width:42px;height:42px;border-radius:15px;font-size:24px}.form{display:grid;gap:12px}.formGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.field label{display:block;margin:0 0 6px;color:var(--muted);font-size:12px;font-weight:1000;text-transform:uppercase;letter-spacing:.12em}.field textarea{min-height:86px;resize:vertical}.formActions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:4px}.empty{border:1px dashed var(--line);border-radius:24px;padding:24px;text-align:center;color:var(--muted);background:rgba(255,255,255,.035)}.toast{position:fixed;left:16px;right:16px;bottom:calc(98px + env(safe-area-inset-bottom));z-index:70;background:#f7fbff;color:#07101e;border-radius:16px;padding:13px 14px;text-align:center;font-weight:1000;box-shadow:0 18px 54px rgba(0,0,0,.42);transform:translateY(30px);opacity:0;pointer-events:none;transition:.22s}.toast.show{transform:none;opacity:1}.backupBox{width:100%;min-height:160px;border-radius:18px;border:1px solid var(--line);background:rgba(0,0,0,.28);color:var(--text);padding:12px;font-family:ui-monospace,Menlo,monospace}.desktopHint{display:none}
-@media(max-width:760px){.app{padding:14px}.pulse{grid-template-columns:repeat(2,1fr)}.workspace,.cards,.kanban{grid-template-columns:1fr}.hero{padding:16px;border-radius:28px}.greeting h2{font-size:27px}.health{width:82px;height:82px;border-radius:27px}.formGrid{grid-template-columns:1fr}.copilotRow{grid-template-columns:1fr}.copilotRow .btn{width:100%}.shipSteps{grid-template-columns:repeat(2,1fr)}.topbar h1{font-size:20px}.navInner{grid-template-columns:repeat(6,1fr)}.version{display:none}}
-@media(min-width:980px){.desktopHint{display:inline}.cards{grid-template-columns:repeat(3,1fr)}}
+  :root {
+    --bg:#070b14;
+    --panel:#0f172a;
+    --panel2:#111827;
+    --card:#111827;
+    --border:#263244;
+    --text:#e5e7eb;
+    --muted:#94a3b8;
+    --red:#ef4444;
+    --blue:#2563eb;
+    --green:#16a34a;
+    --amber:#f59e0b;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(239,68,68,.16), transparent 34%),
+      radial-gradient(circle at top right, rgba(37,99,235,.16), transparent 34%),
+      var(--bg);
+    color:var(--text);
+  }
+  .app { max-width:1050px; margin:0 auto; padding:16px; padding-bottom:90px; }
+  .topbar {
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:14px 0 18px;
+  }
+  .brand { display:flex; align-items:center; gap:10px; }
+  .logo {
+    width:42px; height:42px; border-radius:14px;
+    display:grid; place-items:center; font-weight:900;
+    background:linear-gradient(135deg, var(--red), var(--blue));
+    box-shadow:0 14px 34px rgba(0,0,0,.35);
+  }
+  .brand h1 { font-size:20px; margin:0; line-height:1.05; }
+  .brand p { margin:3px 0 0; color:var(--muted); font-size:12px; }
+  .pill {
+    border:1px solid var(--border); background:rgba(15,23,42,.8); color:var(--muted);
+    padding:8px 10px; border-radius:999px; font-size:12px;
+  }
+  .tabs {
+    position:fixed; left:0; right:0; bottom:0; z-index:20;
+    background:rgba(7,11,20,.94); backdrop-filter:blur(14px);
+    border-top:1px solid var(--border);
+    display:grid; grid-template-columns:repeat(5,1fr); gap:2px; padding:8px max(8px, env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom));
+  }
+  .tabbtn {
+    background:transparent; color:var(--muted); border:0; border-radius:12px;
+    padding:9px 4px; font-size:12px;
+  }
+  .tabbtn.active { background:#162033; color:white; }
+  .page { display:none; }
+  .page.active { display:block; }
+  .hero {
+    border:1px solid var(--border); border-radius:22px; padding:18px;
+    background:linear-gradient(145deg, rgba(17,24,39,.95), rgba(15,23,42,.78));
+    box-shadow:0 18px 50px rgba(0,0,0,.25);
+    margin-bottom:14px;
+  }
+  .hero h2 { margin:0 0 4px; font-size:24px; }
+  .hero p { margin:0; color:var(--muted); }
+  .dashboard {
+    display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px;
+  }
+  .tile {
+    border:1px solid var(--border); border-radius:16px; padding:13px;
+    background:linear-gradient(145deg, #111827, #0f172a);
+    cursor:pointer;
+  }
+  .tile span { display:block; color:var(--muted); font-size:12px; }
+  .tile strong { display:block; font-size:24px; margin-top:2px; }
+  .tile.active { border-color:var(--red); box-shadow:0 0 0 1px rgba(239,68,68,.3) inset; }
+  .toolbar {
+    display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;
+  }
+  input, select, button, textarea {
+    font:inherit;
+  }
+  input, select, textarea {
+    background:#0b1220; color:var(--text); border:1px solid var(--border);
+    border-radius:12px; padding:11px 12px; outline:none;
+  }
+  .toolbar input, .toolbar select { flex:1; min-width:145px; }
+  .btn {
+    background:#1e293b; color:white; border:1px solid var(--border);
+    border-radius:12px; padding:11px 14px; cursor:pointer;
+  }
+  .btn.primary { background:linear-gradient(135deg, var(--red), #b91c1c); border-color:rgba(239,68,68,.6); }
+  .btn.blue { background:linear-gradient(135deg, var(--blue), #1d4ed8); border-color:rgba(37,99,235,.6); }
+  .btn.active { background:var(--red); border-color:var(--red); }
+  .card-grid { display:grid; gap:10px; }
+  .inventory-card {
+    border:1px solid var(--border); border-radius:18px; padding:14px;
+    background:rgba(17,24,39,.92); box-shadow:0 12px 30px rgba(0,0,0,.18);
+  }
+  .card-top { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+  .card-top h3 { margin:0; font-size:17px; }
+  .meta { color:var(--muted); font-size:13px; margin-top:4px; }
+  .status {
+    font-size:12px; padding:5px 9px; border-radius:999px; white-space:nowrap; background:#334155;
+  }
+  .status.available { background:#14532d; color:#dcfce7; }
+  .status.listed { background:#1e3a8a; color:#dbeafe; }
+  .status.sold { background:#7f1d1d; color:#fee2e2; }
+  .status.pending { background:#713f12; color:#fef3c7; }
+  .money { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
+  .money div { background:#0b1220; border:1px solid var(--border); padding:9px; border-radius:12px; }
+  .money span { display:block; color:var(--muted); font-size:11px; }
+  .money strong { font-size:14px; }
+  .actions { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
+  .actions button { padding:9px; border-radius:11px; border:0; color:white; background:#334155; }
+  .table-wrap { overflow-x:auto; border:1px solid var(--border); border-radius:16px; background:#0b1220; }
+  table { width:100%; border-collapse:collapse; min-width:850px; }
+  th, td { padding:10px; border-bottom:1px solid var(--border); text-align:left; font-size:13px; }
+  th { color:#cbd5e1; background:#111827; position:sticky; top:0; }
+  td { color:#e5e7eb; }
+  .form {
+    display:grid; grid-template-columns:repeat(2,1fr); gap:10px;
+    border:1px solid var(--border); border-radius:18px; padding:14px; background:#0f172a; margin-bottom:14px;
+  }
+  .form .wide { grid-column:1/-1; }
+  .empty { text-align:center; color:var(--muted); padding:30px 10px; border:1px dashed var(--border); border-radius:16px; }
+  .section-title { margin:18px 0 10px; font-size:18px; }
+  @media (max-width:700px) {
+    .dashboard { grid-template-columns:repeat(2,1fr); }
+    .form { grid-template-columns:1fr; }
+    .money { grid-template-columns:1fr 1fr; }
+    .actions { grid-template-columns:1fr; }
+    .brand h1 { font-size:18px; }
+  }
 </style>
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="brandmark"><div class="appicon">BT</div><div><div class="eyebrow">SPGS Operating System</div><h1>Bat Tank</h1></div></div>
-    <div class="version">Mission Control 4.0</div>
+    <div class="brand">
+      <div class="logo">BT</div>
+      <div>
+        <h1>Bat Tank</h1>
+        <p>SPGS Operating System</p>
+      </div>
+    </div>
+    <div class="pill">Mission Control 4.1</div>
   </header>
 
-  <main id="today" class="screen active">
+  <main id="today" class="page active">
     <section class="hero">
-      <div class="greeting"><div><div class="eyebrow" id="dayLine">Today</div><h2 id="greeting">Good Morning, Chuck</h2><p style="color:var(--muted);font-weight:800;margin:8px 0 0">Open app → clear focus → log fast → keep moving.</p></div><div class="health"><div><b id="healthScore">100</b><span>Health</span></div></div></div>
-      <div class="focus" id="focusList"></div>
+      <h2>Good Morning, Chuck</h2>
+      <p>Open app → clear focus → log fast → keep moving.</p>
     </section>
-    <section class="copilot"><label>💬 Quick Log</label><div class="copilotRow"><input id="copilotInput" placeholder="Sold America to Steve for 340 shipped"><button class="btn primary" id="parseBtn">Preview</button></div><div class="preview" id="copilotPreview"></div></section>
-    <section class="pulse" id="pulse"></section>
-    <section class="workspace"><div class="panel"><div class="panelHead"><h3>Smart Inbox</h3><button class="btn ghost" onclick="showScreen('shipping')">Open</button></div><div class="inboxList" id="inboxList"></div></div><div class="panel"><div class="panelHead"><h3>Recent Activity</h3><button class="btn ghost" onclick="showScreen('brain')">View</button></div><div class="activity" id="todayActivity"></div></div></section>
+    <section class="dashboard">
+      <div class="tile"><span>Inventory</span><strong id="homeInventory">0</strong></div>
+      <div class="tile"><span>Available</span><strong id="homeAvailable">0</strong></div>
+      <div class="tile"><span>Sold</span><strong id="homeSold">0</strong></div>
+      <div class="tile"><span>Value</span><strong id="homeValue">$0</strong></div>
+    </section>
+    <h3 class="section-title">Smart Inbox</h3>
+    <div class="inventory-card"><div class="meta">Use Inventory OS to add bats, switch between Full and Condensed view, and track status fast.</div></div>
   </main>
 
-  <main id="inventory" class="screen">
-    <div class="sectionTitle"><h2>Inventory OS</h2><button class="btn primary" onclick="openBat()">Add Bat</button></div>
-    <div class="tools"><input class="searchInput" id="inventorySearch" placeholder="Search inventory"><select class="searchInput" id="statusFilter"><option value="all">All</option><option value="available">Available</option><option value="listed">Listed</option><option value="sold">Sold</option><option value="pending">Pending</option></select></div>
-    <div class="cards" id="inventoryCards"></div>
+  <main id="inventoryPage" class="page">
+    <section class="hero">
+      <h2>Inventory OS</h2>
+      <p>Full table when you need detail. Condensed cards when you need speed.</p>
+    </section>
+
+    <form id="inventoryForm" class="form">
+      <input id="batName" placeholder="Brand & Model" required />
+      <input id="batSpecs" placeholder="Specs — 25oz • ASA" />
+      <select id="batCondition">
+        <option>NIW</option><option>Mint</option><option>Used</option><option>Incoming</option>
+      </select>
+      <select id="batStatus">
+        <option>Available</option><option>Listed</option><option>Pending</option><option>Sold</option>
+      </select>
+      <input id="batCost" type="number" step="0.01" placeholder="Cost" />
+      <input id="batValue" type="number" step="0.01" placeholder="Estimated Value / Sale" />
+      <textarea id="batNotes" class="wide" placeholder="Notes"></textarea>
+      <button class="btn primary wide" type="submit">Add Bat</button>
+    </form>
+
+    <section class="dashboard">
+      <div class="tile inv-filter active" data-filter="all"><span>Total</span><strong id="invTotal">0</strong></div>
+      <div class="tile inv-filter" data-filter="available"><span>Available</span><strong id="invAvailable">0</strong></div>
+      <div class="tile inv-filter" data-filter="listed"><span>Listed</span><strong id="invListed">0</strong></div>
+      <div class="tile inv-filter" data-filter="sold"><span>Sold</span><strong id="invSold">0</strong></div>
+    </section>
+
+    <div class="toolbar">
+      <input id="inventorySearch" placeholder="Search inventory..." />
+      <select id="associationFilter">
+        <option value="all">All Associations</option>
+        <option value="asa">ASA / USA</option>
+        <option value="usssa">USSSA</option>
+      </select>
+      <button id="fullViewBtn" class="btn" type="button">Full</button>
+      <button id="condensedViewBtn" class="btn active" type="button">Condensed</button>
+    </div>
+
+    <div id="inventoryContainer"></div>
   </main>
 
-  <main id="raffles" class="screen">
-    <div class="sectionTitle"><div><h2>Completed Raffle Log</h2><p style="margin:4px 0 0;color:var(--muted);font-weight:800">Log finished runs: spots, cost, winner, prize, shipping, and profit.</p></div><button class="btn primary" onclick="openRaffle()">Log Raffle</button></div>
-    <div class="pulse" id="rafflePulse"></div>
-    <div class="cards" id="raffleBoard"></div>
-  </main>
-
-  <main id="shipping" class="screen">
-    <div class="sectionTitle"><h2>Shipping Queue</h2><button class="btn primary" onclick="openShipment()">Add Shipment</button></div>
-    <div class="shipList" id="shippingList"></div>
-  </main>
-
-  <main id="sis" class="screen">
-    <div class="sectionTitle"><h2>SIS Hub</h2><button class="btn green" onclick="copySISMessage()">Copy SPGS Msg</button></div>
-    <section class="sisBox"><div class="eyebrow">Smash It Sports Reference</div><h2 style="margin:5px 0 6px;letter-spacing:-.06em">Search current product pages</h2><p style="color:var(--muted);font-weight:750">Safe reference hub: opens live SIS searches, saves watchlist items, and creates planning inventory without fragile scraping.</p><div class="copilotRow" style="margin-top:12px"><input id="sisQuery" placeholder="Anarchy USA 25"><button class="btn primary" onclick="openSISSearch()">Search</button></div><div class="filterRow" id="sisFilters"></div></section>
-    <div class="sectionTitle"><h2>Watchlist</h2><button class="btn ghost" onclick="addWatchItem()">Add Watch</button></div><div class="cards" id="watchCards"></div>
-  </main>
-
-  <main id="brain" class="screen">
-    <div class="sectionTitle"><h2>Business Brain</h2><button class="btn ghost" onclick="dailyClose()">Daily Close</button></div>
-    <div class="brainList" id="brainList"></div>
-    <div class="sectionTitle"><h2>Timeline</h2><button class="btn primary" onclick="openEvent()">Log Event</button></div>
-    <div class="activity" id="timeline"></div>
-    <div class="sectionTitle"><h2>Backup</h2><button class="btn green" onclick="copyBackup()">Copy Backup</button></div>
-    <textarea class="backupBox" id="backupBox" readonly></textarea>
-  </main>
+  <main id="raffles" class="page"><section class="hero"><h2>Completed Raffle Log</h2><p>Log finished runs: spots, cost, winner, prize, shipping, and profit.</p></section><div class="empty">Raffle form comes next.</div></main>
+  <main id="ship" class="page"><section class="hero"><h2>Shipping Queue</h2><p>Track labels, winners, and outgoing bats.</p></section><div class="empty">Shipping queue comes next.</div></main>
+  <main id="brain" class="page"><section class="hero"><h2>Business Brain</h2><p>Daily close, profit snapshot, and activity timeline.</p></section><button class="btn blue" onclick="copyBackup()">Copy Backup</button></main>
 </div>
 
-<button class="fab" onclick="openActions()">+</button>
-<nav class="bottomNav"><div class="navInner">
-  <button class="navBtn active" data-screen="today"><span>🏠</span>Today</button>
-  <button class="navBtn" data-screen="inventory"><span>📦</span>Inventory</button>
-  <button class="navBtn" data-screen="raffles"><span>🎰</span>Raffles</button>
-  <button class="navBtn" data-screen="shipping"><span>🚚</span>Ship</button>
-  <button class="navBtn" data-screen="sis"><span>🏪</span>SIS</button>
-  <button class="navBtn" data-screen="brain"><span>🧠</span>Brain</button>
-</div></nav>
-<div class="sheetBackdrop" id="backdrop" onclick="closeSheet()"></div>
-<section class="sheet" id="sheet"></section>
-<div class="toast" id="toast"></div>
+<nav class="tabs">
+  <button class="tabbtn active" data-page="today">Today</button>
+  <button class="tabbtn" data-page="inventoryPage">Inventory</button>
+  <button class="tabbtn" data-page="raffles">Raffles</button>
+  <button class="tabbtn" data-page="ship">Ship</button>
+  <button class="tabbtn" data-page="brain">Brain</button>
+</nav>
+
 <script>
-(()=>{
-const STORE='spgsBatTankV10MissionControl', OLD=['spgsBatTankV9','spgsBatTankV6','spgsBatTankV5','spgsBatTankV4','spgsBatTankV3','spgsBatTankV2','batTankSpgsFixed'];
-let state={bats:[],raffles:[],events:[],sisWatch:[]};
-const $=id=>document.getElementById(id), money=v=>'$'+(Number(v)||0).toLocaleString(undefined,{maximumFractionDigits:2}), num=v=>Number(String(v??'').replace(/[^0-9.-]/g,''))||0, uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7), today=()=>new Date().toISOString().slice(0,10), esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function normalize(d){if(Array.isArray(d))d={bats:d};d=d||{};return{bats:(d.bats||[]).map(b=>({...b,id:b.id||uid(),status:(b.status||'available').toLowerCase(),photos:b.photos||[],shipStatus:b.shipStatus||'none'})),raffles:(d.raffles||[]).map(r=>({...r,id:r.id||uid(),status:r.status||'draft'})),events:d.events||[],sisWatch:d.sisWatch||[]}}
-function load(){let raw=localStorage.getItem(STORE);if(!raw){for(const k of OLD){raw=localStorage.getItem(k);if(raw)break}}try{state=normalize(JSON.parse(raw||'{}'))}catch(e){state=normalize({})}}
-function save(){localStorage.setItem(STORE,JSON.stringify(state));$('backupBox').value=JSON.stringify(state,null,2)}
-function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
-function addEvent(type,title,details='',amount=0,ref=''){state.events.unshift({id:uid(),type,title,details,amount,date:new Date().toISOString(),ref});state.events=state.events.slice(0,300)}
-function batName(b){return [b.weight?b.weight+'oz':'',b.brand,b.model].filter(Boolean).join(' ')||'Untitled Bat'}
-function netBat(b){return num(b.sold)-num(b.cost)-num(b.shippingCost)-num(b.fees)}function potBat(b){return num(b.ask)-num(b.cost)}function raffleGross(r){return (num(r.spots)||num(r.filled))*num(r.price)}function rafflePrizeCost(r){if(r.prizeType==='sis')return num(r.sisCost);const b=state.bats.find(x=>x.id===r.prizeBatId);return num(r.prizeCost)||num(b?.cost)}function raffleProfit(r){return raffleGross(r)-rafflePrizeCost(r)-num(r.shipping)-num(r.fees)}function rafflePrizeLabel(r){if(r.prizeType==='sis')return r.sisOrderName||'SIS Order';const b=state.bats.find(x=>x.id===r.prizeBatId);return b?batName(b):(r.prize||'Inventory Prize')}function raffleProgress(r){return 100}function inMonth(d){return String(d||today()).slice(0,7)===today().slice(0,7)}function isToday(d){return String(d||'').slice(0,10)===today()}
-function tasks(){let out=[];state.bats.filter(b=>['todo','packed','shipped'].includes(b.shipStatus)).forEach(b=>out.push({kind:'ship',level:b.shipStatus==='todo'?'red':'amber',title:`Ship ${batName(b)}`,detail:`${b.buyer||'Buyer'} · ${label(b.shipStatus)}`,id:b.id}));state.bats.filter(b=>b.status!=='sold'&&!num(b.ask)).forEach(b=>out.push({kind:'price',level:'amber',title:`Price ${batName(b)}`,detail:'Missing asking price',id:b.id}));state.raffles.filter(r=>!r.winner||(!r.prizeBatId&&r.prizeType!=='sis')).forEach(r=>out.push({kind:'raffle',level:'purple',title:`Complete raffle log: ${r.name||'Raffle'}`,detail:!r.winner?'Winner missing':'Prize missing',id:r.id}));if(state.bats.length||state.raffles.length)out.push({kind:'backup',level:'green',title:'Backup recommended',detail:'Copy backup after updates'});return out.slice(0,12)}
-function label(s){return ({available:'Available',listed:'Listed',sold:'Sold',pending:'Pending',draft:'Draft',live:'Live',full:'Full',winner:'Winner',shipped:'Shipped',archived:'Archived',none:'None',todo:'To Ship',packed:'Packed',delivered:'Delivered'}[s]||s||'')}
-function icon(t){return ({buy:'🟢',sale:'💰',raffle:'🎰',ship:'🚚',expense:'💳',note:'⚡',sis:'🏪'}[t]||'⚡')}
-function stats(){const sold=state.bats.filter(b=>b.status==='sold'), available=state.bats.filter(b=>b.status!=='sold');const soldNet=sold.reduce((a,b)=>a+netBat(b),0);const monthNet=sold.filter(b=>inMonth(b.soldDate||b.date)).reduce((a,b)=>a+netBat(b),0);const todayNet=sold.filter(b=>isToday(b.soldDate)).reduce((a,b)=>a+netBat(b),0);const invCost=available.reduce((a,b)=>a+num(b.cost),0);const invAsk=available.reduce((a,b)=>a+(num(b.ask)||num(b.cost)),0);const raffleNet=state.raffles.reduce((a,r)=>a+raffleProfit(r),0);const monthRaffleNet=state.raffles.filter(r=>inMonth(r.date)).reduce((a,r)=>a+raffleProfit(r),0);return{soldNet,monthNet:monthNet+monthRaffleNet,todayNet,invCost,invAsk,available:available.length,sold:sold.length,openRaffles:state.raffles.length,raffleNet,monthRaffleNet,shipCount:state.bats.filter(b=>['todo','packed','shipped'].includes(b.shipStatus)).length,tasks:tasks().length}}
-function health(){const s=stats();let score=100;score-=Math.min(30,tasks().filter(t=>t.level==='red').length*12);score-=Math.min(18,tasks().filter(t=>t.level==='amber').length*5);score-=state.bats.filter(b=>b.status!=='sold'&&!num(b.ask)).length*2;return Math.max(55,Math.min(100,score))}
-function render(){save();renderGreeting();renderPulse();renderTasks();renderInventory();renderRaffles();renderShipping();renderBrain();renderSIS();renderTimeline()}
-function renderGreeting(){const h=new Date().getHours();$('greeting').textContent=(h<12?'Good Morning':h<18?'Good Afternoon':'Good Evening')+', Chuck';$('dayLine').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});$('healthScore').textContent=health()}
-function renderPulse(){const s=stats();$('pulse').innerHTML=`<div class="metric good"><small>Today Profit</small><b>${money(s.todayNet)}</b></div><div class="metric good"><small>Month Net</small><b>${money(s.monthNet)}</b></div><div class="metric"><small>Inventory</small><b>${money(s.invAsk)}</b></div><div class="metric warn"><small>Tasks</small><b>${s.tasks}</b></div>`}
-function renderTasks(){const list=tasks();const html=list.length?list.map(t=>`<button class="focusItem" onclick="handleTask('${t.kind}','${t.id||''}')"><span class="priority ${t.level}"></span><span style="flex:1"><strong>${esc(t.title)}</strong><small>${esc(t.detail)}</small></span><span class="arrow">›</span></button>`).join(''):`<div class="focusItem"><span class="priority green"></span><span style="flex:1"><strong>No urgent tasks</strong><small>You are clear right now.</small></span></div>`;$('focusList').innerHTML=html;$('inboxList').innerHTML=html}
-function renderInventory(){const q=($('inventorySearch')?.value||'').toLowerCase(), f=$('statusFilter')?.value||'all';let bats=state.bats.filter(b=>(f==='all'||b.status===f)&&JSON.stringify(b).toLowerCase().includes(q));bats.sort((a,b)=>(b.pinned?1:0)-(a.pinned?1:0)||batName(a).localeCompare(batName(b)));$('inventoryCards').innerHTML=bats.length?bats.map(b=>batCard(b)).join(''):`<div class="empty">No bats match this view.</div>`}
-function batCard(b){const profit=b.status==='sold'?netBat(b):potBat(b);const photo=b.photos&&b.photos[0]?`<img src="${b.photos[0]}">`:'🥎';return `<article class="card" onclick="openBat('${b.id}')"><div class="cardTop"><div><div class="title">${esc(batName(b))}</div><div class="subtitle">${esc(b.condition||'Condition not set')} · ${esc(b.association||'ASA')}</div></div><div class="thumb">${photo}</div></div><div class="chips"><span class="chip ${b.status==='sold'?'red':b.status==='listed'?'green':'blue'}">${label(b.status)}</span>${b.pinned?'<span class="chip amber">Pinned</span>':''}<span class="chip">${esc(b.source||'No source')}</span></div><div class="financial"><div class="moneyBox"><small>Cost</small><b>${money(num(b.cost))}</b></div><div class="moneyBox"><small>${b.status==='sold'?'Sold':'Ask'}</small><b>${money(num(b.status==='sold'?b.sold:b.ask))}</b></div><div class="moneyBox"><small>${b.status==='sold'?'Net':'Potential'}</small><b style="color:${profit>=0?'var(--green)':'var(--red)'}">${money(profit)}</b></div></div><div class="miniActions"><button onclick="event.stopPropagation();quickList('${b.id}')">List</button><button onclick="event.stopPropagation();quickSell('${b.id}')">Sell</button><button onclick="event.stopPropagation();togglePin('${b.id}')">${b.pinned?'Unpin':'Pin'}</button></div></article>`}
-function renderRaffles(){
-  const totalGross=state.raffles.reduce((a,r)=>a+raffleGross(r),0), totalProfit=state.raffles.reduce((a,r)=>a+raffleProfit(r),0), avg=state.raffles.length?totalProfit/state.raffles.length:0;
-  $('rafflePulse').innerHTML=`<div class="metric good"><small>Raffle Gross</small><b>${money(totalGross)}</b></div><div class="metric good"><small>Raffle Profit</small><b>${money(totalProfit)}</b></div><div class="metric"><small>Completed</small><b>${state.raffles.length}</b></div><div class="metric warn"><small>Avg Profit</small><b>${money(avg)}</b></div>`;
-  const sorted=[...state.raffles].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
-  $('raffleBoard').innerHTML=sorted.length?sorted.map(r=>raffleCard(r)).join(''):`<div class="empty">No completed raffles logged yet. Tap “Log Raffle” after a run fills and a winner is known.</div>`;
+const STORAGE_KEY = "spgs_inventory_v41";
+let inventory = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+let viewMode = window.innerWidth < 700 ? "condensed" : "full";
+let quickFilter = "all";
+let editingIndex = null;
+
+function money(n) { return `$${Number(n || 0).toFixed(2)}`; }
+function statusClass(status) { return (status || "unknown").toLowerCase().replace(/\s+/g, "-"); }
+function saveInventory() { localStorage.setItem(STORAGE_KEY, JSON.stringify(inventory)); updateHome(); }
+
+function seedIfEmpty() {
+  if (inventory.length) return;
+  inventory = [
+    { name:"Anarchy America", specs:"26oz • ASA", condition:"Mint", status:"Available", cost:0, value:325, notes:"Opening inventory" },
+    { name:"Miken Superfreak", specs:"25oz • ASA", condition:"Used", status:"Available", cost:0, value:250, notes:"Opening inventory" },
+    { name:"Easton Tantrum", specs:"25oz • USSSA", condition:"Used", status:"Listed", cost:0, value:230, notes:"Opening inventory" }
+  ];
+  saveInventory();
 }
-function raffleCard(r){const gross=raffleGross(r), cost=rafflePrizeCost(r), profit=raffleProfit(r);return `<article class="card" onclick="openRaffle('${r.id}')"><div class="cardTop"><div><div class="title">${esc(r.name||`${r.spots||0} × ${money(num(r.price))}`)}</div><div class="subtitle">${esc(r.date||'No date')} · Winner: ${esc(r.winner||'Pending')}</div></div><div class="thumb">🎰</div></div><div class="chips"><span class="chip green">Completed</span><span class="chip blue">${num(r.spots)} spots</span><span class="chip purple">${esc(rafflePrizeLabel(r))}</span></div><div class="raffleSummary"><div class="moneyBox"><small>Gross</small><b>${money(gross)}</b></div><div class="moneyBox"><small>Prize Cost</small><b>${money(cost)}</b></div><div class="moneyBox"><small>Profit</small><b style="color:${profit>=0?'var(--green)':'var(--red)'}">${money(profit)}</b></div></div></article>`}
-function renderShipping(){const list=state.bats.filter(b=>['todo','packed','shipped','delivered'].includes(b.shipStatus));$('shippingList').innerHTML=list.length?list.map(b=>`<article class="shipItem"><div class="cardTop"><div><div class="title">${esc(batName(b))}</div><div class="subtitle">${esc(b.buyer||'Buyer not set')} · ${esc(b.tracking||'No tracking')}</div></div><button class="btn ghost" onclick="openBat('${b.id}')">Open</button></div><div class="shipSteps">${['todo','packed','shipped','delivered'].map(st=>`<button class="step ${shipDone(b.shipStatus,st)?'done':''}" onclick="setShip('${b.id}','${st}')">${label(st)}</button>`).join('')}</div></article>`).join(''):`<div class="empty">No packages in the queue.</div>`}
-function shipDone(current,st){const order=['todo','packed','shipped','delivered'];return order.indexOf(current)>=order.indexOf(st)}
-function renderBrain(){const s=stats();const brand={};state.bats.filter(b=>b.status==='sold').forEach(b=>{const k=b.brand||'Unknown';brand[k]=brand[k]||{n:0,p:0};brand[k].n++;brand[k].p+=netBat(b)});const top=Object.entries(brand).sort((a,b)=>b[1].p-a[1].p)[0];const slow=state.bats.filter(b=>b.status!=='sold'&&num(b.ask)).slice(0,3);let cards=[`<article class="brainCard"><strong>${money(s.invCost)}</strong><p>Cash currently tied up in available inventory.</p></article>`,`<article class="brainCard"><strong>${s.shipCount}</strong><p>Package${s.shipCount===1?'':'s'} currently need shipping attention.</p></article>`,top?`<article class="brainCard"><strong>${esc(top[0])}</strong><p>Your top profit brand in recorded sales: ${money(top[1].p)} across ${top[1].n} sale${top[1].n===1?'':'s'}.</p></article>`:`<article class="brainCard"><strong>Start selling</strong><p>Once sales are logged, Bat Tank will rank your best brands and profit patterns.</p></article>`,`<article class="brainCard"><strong>${state.bats.filter(b=>b.status!=='sold'&&!num(b.ask)).length}</strong><p>Available bats still need pricing.</p></article>`];$('brainList').innerHTML=cards.join('')}
-function renderTimeline(){const ev=state.events.slice(0,35);const html=ev.length?ev.map(e=>`<article class="event"><div class="eventIcon">${icon(e.type)}</div><div><h4>${esc(e.title)}</h4><p>${esc(e.details||'')}</p><small>${new Date(e.date).toLocaleString()}${num(e.amount)?' · '+money(e.amount):''}</small></div></article>`).join(''):`<div class="empty">Timeline events will appear here.</div>`;$('timeline').innerHTML=html;$('todayActivity').innerHTML=ev.slice(0,5).map(e=>`<article class="event"><div class="eventIcon">${icon(e.type)}</div><div><h4>${esc(e.title)}</h4><p>${esc(e.details||'')}</p></div></article>`).join('')||'<div class="empty">No activity yet today.</div>'}
-function renderSIS(){const terms=['ASA slowpitch bat','USSSA slowpitch bat','Anarchy USA','Miken USA','Worth USSSA','Easton slowpitch','Senior slowpitch bat'];$('sisFilters').innerHTML=terms.map(t=>`<button class="btn ghost" onclick="sisPreset('${esc(t)}')">${esc(t)}</button>`).join('');$('watchCards').innerHTML=state.sisWatch.length?state.sisWatch.map(w=>`<article class="card"><div class="title">${esc(w.name)}</div><div class="subtitle">${esc(w.notes||'SIS watchlist')}</div><div class="miniActions"><button onclick="openSIS('${encodeURIComponent(w.name)}')">Search</button><button onclick="watchToPlan('${w.id}')">Plan</button><button onclick="deleteWatch('${w.id}')">Delete</button></div></article>`).join(''):`<div class="empty">No SIS watchlist items yet.</div>`}
-window.showScreen=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));document.querySelectorAll('.navBtn').forEach(b=>b.classList.toggle('active',b.dataset.screen===id));window.scrollTo({top:0,behavior:'smooth'});render()};document.querySelectorAll('.navBtn').forEach(b=>b.addEventListener('click',()=>showScreen(b.dataset.screen)));
-function openSheet(title,body){$('backdrop').classList.add('open');$('sheet').innerHTML=`<div class="sheetHead"><h2>${title}</h2><button class="close" onclick="closeSheet()">×</button></div>${body}`;$('sheet').classList.add('open')}window.closeSheet=()=>{$('backdrop').classList.remove('open');$('sheet').classList.remove('open')}
-window.openActions=()=>openSheet('Quick Action',`<div class="grid"><button class="btn primary" onclick="openBat()">📦 Add / Edit Bat</button><button class="btn green" onclick="openEvent('sale')">💰 Record Sale</button><button class="btn purple" onclick="openRaffle()">🎰 New Raffle</button><button class="btn amber" onclick="openShipment()">🚚 Add Shipment</button><button class="btn ghost" onclick="openEvent()">⚡ Manual Event</button></div>`)
-window.openBat=id=>{const b=state.bats.find(x=>x.id===id)||{};openSheet(id?'Bat Workspace':'Add Bat',`<form class="form" id="batForm"><div class="formGrid"><div class="field"><label>Brand</label><input name="brand" value="${esc(b.brand||'')}"></div><div class="field"><label>Model</label><input name="model" value="${esc(b.model||'')}"></div><div class="field"><label>Weight</label><input name="weight" value="${esc(b.weight||'')}"></div><div class="field"><label>Association</label><select name="association"><option ${b.association==='ASA'?'selected':''}>ASA</option><option ${b.association==='USSSA'?'selected':''}>USSSA</option><option ${b.association==='Senior'?'selected':''}>Senior</option></select></div><div class="field"><label>Condition</label><input name="condition" value="${esc(b.condition||'')}"></div><div class="field"><label>Status</label><select name="status"><option value="available" ${b.status==='available'?'selected':''}>Available</option><option value="listed" ${b.status==='listed'?'selected':''}>Listed</option><option value="pending" ${b.status==='pending'?'selected':''}>Pending</option><option value="sold" ${b.status==='sold'?'selected':''}>Sold</option></select></div><div class="field"><label>Cost</label><input name="cost" value="${esc(b.cost||'')}"></div><div class="field"><label>Asking</label><input name="ask" value="${esc(b.ask||'')}"></div><div class="field"><label>Sold Price</label><input name="sold" value="${esc(b.sold||'')}"></div><div class="field"><label>Buyer</label><input name="buyer" value="${esc(b.buyer||'')}"></div><div class="field"><label>Shipping Cost</label><input name="shippingCost" value="${esc(b.shippingCost||'')}"></div><div class="field"><label>Fees</label><input name="fees" value="${esc(b.fees||'')}"></div><div class="field"><label>Ship Status</label><select name="shipStatus"><option value="none" ${b.shipStatus==='none'?'selected':''}>None</option><option value="todo" ${b.shipStatus==='todo'?'selected':''}>To Ship</option><option value="packed" ${b.shipStatus==='packed'?'selected':''}>Packed</option><option value="shipped" ${b.shipStatus==='shipped'?'selected':''}>Shipped</option><option value="delivered" ${b.shipStatus==='delivered'?'selected':''}>Delivered</option></select></div><div class="field"><label>Tracking</label><input name="tracking" value="${esc(b.tracking||'')}"></div></div><div class="field"><label>Source</label><input name="source" value="${esc(b.source||'')}"></div><div class="field"><label>Notes</label><textarea name="notes">${esc(b.notes||'')}</textarea></div><div class="formActions"><button class="btn primary" type="submit">Save Bat</button><button class="btn green" type="button" onclick="copyListing('${id||''}')">Copy Listing</button>${id?`<button class="btn ghost" type="button" onclick="togglePin('${id}')">${b.pinned?'Unpin':'Pin'}</button><button class="btn red" type="button" onclick="deleteBat('${id}')">Delete</button>`:''}</div></form>`);$('batForm').onsubmit=e=>{e.preventDefault();const fd=new FormData(e.target);let obj=Object.fromEntries(fd.entries());if(id){Object.assign(b,obj)}else{obj.id=uid();obj.date=today();obj.photos=[];state.bats.unshift(obj);addEvent('buy','Inventory added',batName(obj),-num(obj.cost),obj.id)}if(obj.status==='sold'||b.status==='sold'){(id?b:obj).soldDate=(id?b.soldDate:obj.soldDate)||today();addEvent('sale','Bat marked sold',batName(id?b:obj),num((id?b:obj).sold),(id?b:obj).id)}closeSheet();render();toast('Bat saved')}}
-window.openRaffle=id=>{const r=state.raffles.find(x=>x.id===id)||{};const availableBats=state.bats.filter(b=>b.status!=='sold'||b.id===r.prizeBatId);const batOptions=['<option value="">Select inventory bat</option>'].concat(availableBats.map(b=>`<option value="${b.id}" ${r.prizeBatId===b.id?'selected':''}>${esc(batName(b))} — cost ${money(num(b.cost))}</option>`)).join('');openSheet(id?'Completed Raffle':'Log Completed Raffle',`<form class="form" id="raffleForm"><div class="formGrid"><div class="field"><label>Raffle Name</label><input name="name" value="${esc(r.name||'')}" placeholder="9x35, 10x35, etc."></div><div class="field"><label>Date</label><input name="date" type="date" value="${esc(r.date||today())}"></div><div class="field"><label>Spots</label><input name="spots" inputmode="decimal" value="${esc(r.spots||'')}" placeholder="9"></div><div class="field"><label>Cost Per Spot</label><input name="price" inputmode="decimal" value="${esc(r.price||'')}" placeholder="35"></div><div class="field"><label>Winner</label><input name="winner" value="${esc(r.winner||'')}" placeholder="Winner name"></div><div class="field"><label>Prize Source</label><select name="prizeType" id="prizeType"><option value="inventory" ${r.prizeType!=='sis'?'selected':''}>Inventory Bat</option><option value="sis" ${r.prizeType==='sis'?'selected':''}>SIS Order</option></select></div><div class="field prizeInventory"><label>Prize From Inventory</label><select name="prizeBatId">${batOptions}</select></div><div class="field prizeSIS"><label>SIS Order / Prize</label><input name="sisOrderName" value="${esc(r.sisOrderName||'')}" placeholder="Any in-stock bat / product name"></div><div class="field prizeSIS"><label>SIS Order Cost</label><input name="sisCost" inputmode="decimal" value="${esc(r.sisCost||'')}" placeholder="Your cost"></div><div class="field"><label>Shipping Cost</label><input name="shipping" inputmode="decimal" value="${esc(r.shipping||'')}"></div><div class="field"><label>Payment Fees / Other Cost</label><input name="fees" inputmode="decimal" value="${esc(r.fees||'')}"></div></div><div class="field"><label>Notes</label><textarea name="notes" placeholder="Spot notes, overnight shipping, winner messages, etc.">${esc(r.notes||'')}</textarea></div><div class="preview open" id="raffleMath"></div><div class="formActions"><button class="btn primary" type="submit">Save Completed Raffle</button><button class="btn green" type="button" onclick="copyRaffleUpdate('${id||''}')">Copy Recap</button>${id?`<button class="btn red" type="button" onclick="deleteRaffle('${id}')">Delete</button>`:''}</div></form>`);const form=$('raffleForm'), type=$('prizeType');function updatePrizeUI(){const sis=type.value==='sis';document.querySelectorAll('.prizeSIS').forEach(el=>el.style.display=sis?'block':'none');document.querySelectorAll('.prizeInventory').forEach(el=>el.style.display=sis?'none':'block');updateRaffleMath()}function updateRaffleMath(){const o=Object.fromEntries(new FormData(form).entries());const temp={...r,...o};const gross=raffleGross(temp), prize=rafflePrizeCost(temp), profit=raffleProfit(temp);$('raffleMath').innerHTML=`<h3 style="margin:0 0 8px">Raffle Math</h3><div class="previewGrid"><div class="previewCell"><small>Gross</small><b>${money(gross)}</b></div><div class="previewCell"><small>Prize Cost</small><b>${money(prize)}</b></div><div class="previewCell"><small>Shipping/Fees</small><b>${money(num(temp.shipping)+num(temp.fees))}</b></div><div class="previewCell"><small>Est. Profit</small><b style="color:${profit>=0?'var(--green)':'var(--red)'}">${money(profit)}</b></div></div>`}form.addEventListener('input',updateRaffleMath);type.addEventListener('change',updatePrizeUI);updatePrizeUI();form.onsubmit=e=>{e.preventDefault();const obj=Object.fromEntries(new FormData(e.target).entries());obj.status='completed';obj.filled=obj.spots;obj.prize= obj.prizeType==='sis' ? (obj.sisOrderName||'SIS Order') : rafflePrizeLabel(obj);obj.prizeCost=rafflePrizeCost(obj);if(id){Object.assign(r,obj)}else{obj.id=uid();state.raffles.unshift(obj)}if(obj.prizeType!=='sis'&&obj.prizeBatId){const b=state.bats.find(x=>x.id===obj.prizeBatId);if(b){b.status='sold';b.buyer=obj.winner;b.soldDate=obj.date||today();b.shipStatus='todo';b.raffleId=obj.id;b.notes=[b.notes,`Raffle prize for ${obj.name||'completed raffle'} won by ${obj.winner||'winner'}`].filter(Boolean).join('\n')}}addEvent('raffle',id?'Raffle updated':'Completed raffle logged',`${obj.name||'Raffle'} · ${obj.winner||'winner'} won ${obj.prize}`,raffleProfit(obj),obj.id);closeSheet();render();toast('Raffle logged')}}
-window.openShipment=()=>{const candidates=state.bats.filter(b=>b.status==='sold');openSheet('Add Shipment',`<form class="form" id="shipForm"><div class="field"><label>Sold Bat</label><select name="id">${candidates.map(b=>`<option value="${b.id}">${esc(batName(b))} — ${esc(b.buyer||'Buyer')}</option>`).join('')}</select></div><div class="field"><label>Tracking</label><input name="tracking"></div><button class="btn primary">Add to Queue</button></form>`);$('shipForm').onsubmit=e=>{e.preventDefault();const fd=Object.fromEntries(new FormData(e.target).entries());const b=state.bats.find(x=>x.id===fd.id);if(b){b.shipStatus='todo';b.tracking=fd.tracking;addEvent('ship','Shipment added',batName(b),0,b.id)}closeSheet();render();toast('Shipment queued')}}
-window.openEvent=type=>{openSheet('Manual Event',`<form class="form" id="eventForm"><div class="formGrid"><div class="field"><label>Type</label><select name="type">${['note','buy','sale','raffle','ship','expense'].map(t=>`<option value="${t}" ${type===t?'selected':''}>${t}</option>`).join('')}</select></div><div class="field"><label>Amount</label><input name="amount"></div></div><div class="field"><label>Title</label><input name="title" placeholder="What happened?"></div><div class="field"><label>Details</label><textarea name="details"></textarea></div><button class="btn primary">Save Event</button></form>`);$('eventForm').onsubmit=e=>{e.preventDefault();const o=Object.fromEntries(new FormData(e.target).entries());addEvent(o.type,o.title||'Event',o.details,num(o.amount));closeSheet();render();toast('Event saved')}}
-window.deleteBat=id=>{state.bats=state.bats.filter(b=>b.id!==id);closeSheet();render();toast('Deleted')};window.deleteRaffle=id=>{state.raffles=state.raffles.filter(r=>r.id!==id);closeSheet();render();toast('Deleted')};window.togglePin=id=>{const b=state.bats.find(x=>x.id===id);if(b){b.pinned=!b.pinned;render();toast(b.pinned?'Pinned':'Unpinned')}};window.quickList=id=>{const b=state.bats.find(x=>x.id===id);if(b){b.status='listed';addEvent('note','Bat listed',batName(b),0,id);render();toast('Marked listed')}};window.quickSell=id=>{const b=state.bats.find(x=>x.id===id);if(b){openBat(id);setTimeout(()=>{document.querySelector('[name=status]').value='sold'},50)}};window.setShip=(id,st)=>{const b=state.bats.find(x=>x.id===id);if(b){b.shipStatus=st;addEvent('ship',`Shipping updated: ${label(st)}`,batName(b),0,id);render();toast('Shipping updated')}};window.handleTask=(kind,id)=>{if(kind==='ship'||kind==='price')openBat(id);else if(kind==='raffle')openRaffle(id);else showScreen('brain')}
-function parseCopilot(text){const t=text.trim();const low=t.toLowerCase();let o={type:'note',title:t,details:'',amount:0};const amount=(low.match(/(?:for|cost|spent|paid|\$)\s*\$?(\d+(?:\.\d+)?)/)||low.match(/\$?(\d+(?:\.\d+)?)\s*(?:shipped|ship|from|at|to)?/));if(amount)o.amount=num(amount[1]);if(low.includes('sold')){o.type='sale';o.title='Sale logged';o.details=t}else if(low.includes('bought')||low.includes('purchased')){o.type='buy';o.title='Purchase logged';o.details=t;o.amount=-Math.abs(o.amount)}else if(low.includes('raffle')){o.type='raffle';o.title='Raffle update';o.details=t}else if(low.includes('ship')||low.includes('tracking')){o.type='ship';o.title='Shipping update';o.details=t}else if(low.includes('spent')||low.includes('expense')){o.type='expense';o.title='Expense logged';o.details=t;o.amount=-Math.abs(o.amount)}return o}
-$('parseBtn').onclick=()=>{const o=parseCopilot($('copilotInput').value);if(!o.details&&!o.title){toast('Type what happened first');return}$('copilotPreview').classList.add('open');$('copilotPreview').innerHTML=`<h3 style="margin:0 0 8px">Confirm Quick Log</h3><div class="previewGrid"><div class="previewCell"><small>Type</small><b>${esc(o.type)}</b></div><div class="previewCell"><small>Amount</small><b>${money(o.amount)}</b></div><div class="previewCell" style="grid-column:1/-1"><small>Details</small><b>${esc(o.details||o.title)}</b></div></div><button class="btn green" id="confirmQuick">Save Log</button>`;$('confirmQuick').onclick=()=>{addEvent(o.type,o.title,o.details,o.amount);$('copilotInput').value='';$('copilotPreview').classList.remove('open');render();toast('Quick log saved')}};
-window.copyListing=id=>{const b=state.bats.find(x=>x.id===id);const text=b?`🔥 ${batName(b)}\n${b.association||'ASA'} · ${b.condition||''}\nAsking: ${money(num(b.ask))}\nDM/comment to claim.\n\nSave with code SPGS at Smash It Sports.`:'Add details first, then copy listing.';navigator.clipboard?.writeText(text);toast('Listing copied')};window.copyRaffleUpdate=id=>{const r=state.raffles.find(x=>x.id===id);const text=r?`🎰 ${r.name}\n${r.filled||0}/${r.spots||0} filled @ ${money(num(r.price))}\n${r.winner?'Winner: '+r.winner+'\n':''}${r.prize?'Prize: '+r.prize+'\n':''}SPGS`:'Raffle update';navigator.clipboard?.writeText(text);toast('Raffle copied')};window.dailyClose=()=>{const s=stats();const text=`SPGS Daily Close\nToday profit: ${money(s.todayNet)}\nMonth net: ${money(s.monthNet)}\nInventory value: ${money(s.invAsk)}\nOpen raffles: ${s.openRaffles}\nPackages: ${s.shipCount}\nTasks: ${s.tasks}`;navigator.clipboard?.writeText(text);toast('Daily close copied')};window.copyBackup=()=>{navigator.clipboard?.writeText($('backupBox').value);toast('Backup copied')}
-window.openSISSearch=()=>openSIS(encodeURIComponent($('sisQuery').value||'slowpitch bat'));window.openSIS=q=>window.open(`https://smashitsports.com/search?q=${q}`,'_blank');window.sisPreset=t=>{$('sisQuery').value=t;openSIS(encodeURIComponent(t))};window.copySISMessage=()=>{navigator.clipboard?.writeText('Check current in-stock slowpitch bats at SmashItSports.com and use code SPGS to save.');toast('SPGS message copied')};window.addWatchItem=()=>{const name=prompt('Watchlist item?');if(name){state.sisWatch.unshift({id:uid(),name,notes:'Watch current SIS availability'});addEvent('sis','SIS watch added',name);render()}};window.deleteWatch=id=>{state.sisWatch=state.sisWatch.filter(w=>w.id!==id);render()};window.watchToPlan=id=>{const w=state.sisWatch.find(x=>x.id===id);if(w){state.bats.unshift({id:uid(),brand:'SIS',model:w.name,status:'pending',association:'ASA',notes:'Imported from SIS watchlist as planning item',date:today(),photos:[],shipStatus:'none'});addEvent('sis','Watch item moved to planning',w.name);render();toast('Added to planning inventory')}};
-$('inventorySearch').addEventListener('input',renderInventory);$('statusFilter').addEventListener('change',renderInventory);
-load();render();
-})();
+
+function updateHome() {
+  const available = inventory.filter(i => statusClass(i.status) === "available").length;
+  const sold = inventory.filter(i => statusClass(i.status) === "sold").length;
+  const value = inventory.reduce((sum, i) => sum + Number(i.value || 0), 0);
+  document.getElementById("homeInventory").textContent = inventory.length;
+  document.getElementById("homeAvailable").textContent = available;
+  document.getElementById("homeSold").textContent = sold;
+  document.getElementById("homeValue").textContent = money(value);
+}
+
+function updateDashboard() {
+  document.getElementById("invTotal").textContent = inventory.length;
+  document.getElementById("invAvailable").textContent = inventory.filter(i => statusClass(i.status) === "available").length;
+  document.getElementById("invListed").textContent = inventory.filter(i => statusClass(i.status) === "listed").length;
+  document.getElementById("invSold").textContent = inventory.filter(i => statusClass(i.status) === "sold").length;
+  document.querySelectorAll(".inv-filter").forEach(t => t.classList.toggle("active", t.dataset.filter === quickFilter));
+}
+
+function getFilteredInventory() {
+  const search = document.getElementById("inventorySearch").value.toLowerCase();
+  const assoc = document.getElementById("associationFilter").value;
+  return inventory.map((item, index) => ({...item, index})).filter(item => {
+    const text = `${item.name} ${item.specs} ${item.condition} ${item.status} ${item.notes}`.toLowerCase();
+    const matchesSearch = text.includes(search);
+    const matchesAssoc = assoc === "all" || (assoc === "asa" && (text.includes("asa") || text.includes("usa"))) || (assoc === "usssa" && text.includes("usssa"));
+    const matchesQuick = quickFilter === "all" || statusClass(item.status) === quickFilter;
+    return matchesSearch && matchesAssoc && matchesQuick;
+  });
+}
+
+function renderInventory() {
+  updateDashboard();
+  document.getElementById("fullViewBtn").classList.toggle("active", viewMode === "full");
+  document.getElementById("condensedViewBtn").classList.toggle("active", viewMode === "condensed");
+  const items = getFilteredInventory();
+  if (viewMode === "full") renderFull(items); else renderCondensed(items);
+}
+
+function renderCondensed(items) {
+  const container = document.getElementById("inventoryContainer");
+  if (!items.length) { container.innerHTML = `<div class="empty">No inventory found.</div>`; return; }
+  container.innerHTML = `<div class="card-grid">${items.map(item => `
+    <article class="inventory-card">
+      <div class="card-top">
+        <div>
+          <h3>${item.name || "Unnamed Bat"}</h3>
+          <div class="meta">${item.specs || "No specs"} • ${item.condition || "No condition"}</div>
+        </div>
+        <span class="status ${statusClass(item.status)}">${item.status || "Unknown"}</span>
+      </div>
+      <div class="money">
+        <div><span>Cost</span><strong>${money(item.cost)}</strong></div>
+        <div><span>Value</span><strong>${money(item.value)}</strong></div>
+        <div><span>Est. Profit</span><strong>${money(Number(item.value || 0) - Number(item.cost || 0))}</strong></div>
+      </div>
+      ${item.notes ? `<div class="meta" style="margin-top:10px;">${item.notes}</div>` : ""}
+      <div class="actions">
+        <button onclick="editItem(${item.index})">Edit</button>
+        <button onclick="markSold(${item.index})">Sold</button>
+        <button onclick="markListed(${item.index})">Listed</button>
+      </div>
+    </article>`).join("")}</div>`;
+}
+
+function renderFull(items) {
+  const container = document.getElementById("inventoryContainer");
+  if (!items.length) { container.innerHTML = `<div class="empty">No inventory found.</div>`; return; }
+  container.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Bat</th><th>Specs</th><th>Condition</th><th>Status</th><th>Cost</th><th>Value</th><th>Profit</th><th>Notes</th><th>Actions</th></tr></thead>
+    <tbody>${items.map(item => `<tr>
+      <td>${item.name}</td><td>${item.specs || ""}</td><td>${item.condition || ""}</td><td>${item.status || ""}</td>
+      <td>${money(item.cost)}</td><td>${money(item.value)}</td><td>${money(Number(item.value || 0) - Number(item.cost || 0))}</td><td>${item.notes || ""}</td>
+      <td><button class="btn" onclick="editItem(${item.index})">Edit</button></td>
+    </tr>`).join("")}</tbody></table></div>`;
+}
+
+function clearForm() {
+  editingIndex = null;
+  document.getElementById("inventoryForm").reset();
+  document.querySelector("#inventoryForm button").textContent = "Add Bat";
+}
+
+document.getElementById("inventoryForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const item = {
+    name: document.getElementById("batName").value.trim(),
+    specs: document.getElementById("batSpecs").value.trim(),
+    condition: document.getElementById("batCondition").value,
+    status: document.getElementById("batStatus").value,
+    cost: Number(document.getElementById("batCost").value || 0),
+    value: Number(document.getElementById("batValue").value || 0),
+    notes: document.getElementById("batNotes").value.trim()
+  };
+  if (editingIndex === null) inventory.unshift(item); else inventory[editingIndex] = item;
+  saveInventory(); clearForm(); renderInventory();
+});
+
+function editItem(index) {
+  const item = inventory[index];
+  editingIndex = index;
+  document.getElementById("batName").value = item.name || "";
+  document.getElementById("batSpecs").value = item.specs || "";
+  document.getElementById("batCondition").value = item.condition || "NIW";
+  document.getElementById("batStatus").value = item.status || "Available";
+  document.getElementById("batCost").value = item.cost || "";
+  document.getElementById("batValue").value = item.value || "";
+  document.getElementById("batNotes").value = item.notes || "";
+  document.querySelector("#inventoryForm button").textContent = "Save Changes";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+function markSold(index) { inventory[index].status = "Sold"; saveInventory(); renderInventory(); }
+function markListed(index) { inventory[index].status = "Listed"; saveInventory(); renderInventory(); }
+
+function copyBackup() {
+  navigator.clipboard.writeText(JSON.stringify(inventory, null, 2));
+  alert("Inventory backup copied.");
+}
+
+document.getElementById("fullViewBtn").addEventListener("click", () => { viewMode = "full"; renderInventory(); });
+document.getElementById("condensedViewBtn").addEventListener("click", () => { viewMode = "condensed"; renderInventory(); });
+document.getElementById("inventorySearch").addEventListener("input", renderInventory);
+document.getElementById("associationFilter").addEventListener("change", renderInventory);
+document.querySelectorAll(".inv-filter").forEach(tile => tile.addEventListener("click", () => { quickFilter = tile.dataset.filter; renderInventory(); }));
+document.querySelectorAll(".tabbtn").forEach(btn => btn.addEventListener("click", () => {
+  document.querySelectorAll(".tabbtn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById(btn.dataset.page).classList.add("active");
+  if (btn.dataset.page === "inventoryPage") renderInventory();
+}));
+
+seedIfEmpty();
+updateHome();
+renderInventory();
 </script>
 </body>
 </html>
